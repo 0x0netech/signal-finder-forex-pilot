@@ -12,6 +12,7 @@ import TradingSignalCard from '@/components/TradingSignalCard';
 import PriceTicker from '@/components/PriceTicker';
 import PairSelector from '@/components/PairSelector';
 import NotificationCenter from '@/components/NotificationCenter';
+import SettingsPanel from '@/components/SettingsPanel';
 import { useToast } from '@/hooks/use-toast';
 
 interface TradingSignal {
@@ -97,6 +98,7 @@ const Index = () => {
   const [signals, setSignals] = useState<TradingSignal[]>(mockSignals);
   const [selectedPairs, setSelectedPairs] = useState<string[]>(['EUR/USD', 'GBP/USD', 'USD/JPY']);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -136,10 +138,7 @@ const Index = () => {
   };
 
   const handleSettingsClick = () => {
-    toast({
-      title: "Settings",
-      description: "Settings panel coming soon...",
-    });
+    setShowSettings(true);
   };
 
   return (
@@ -209,7 +208,7 @@ const Index = () => {
       </header>
 
       {/* Price Ticker */}
-      <PriceTicker />
+      <PriceTicker selectedPairs={selectedPairs} />
 
       <div className="container mx-auto px-6 py-8">
         {/* Performance Overview with Enhanced Styling */}
@@ -351,33 +350,51 @@ const Index = () => {
 
           <TabsContent value="charts" className="space-y-6">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold font-display">Real-Time Price Charts</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <PriceChart
-                  pair="EUR/USD"
-                  currentPrice={1.0850}
-                  change={0.0025}
-                  changePercent={0.23}
-                />
-                <PriceChart
-                  pair="GBP/USD"
-                  currentPrice={1.2650}
-                  change={-0.0015}
-                  changePercent={-0.12}
-                />
-                <PriceChart
-                  pair="USD/JPY"
-                  currentPrice={149.50}
-                  change={0.75}
-                  changePercent={0.50}
-                />
-                <PriceChart
-                  pair="AUD/USD"
-                  currentPrice={0.6550}
-                  change={-0.0030}
-                  changePercent={-0.46}
-                />
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold font-display">Real-Time Price Charts</h2>
+                <Badge variant="outline" className="bg-primary/10 text-primary">
+                  {selectedPairs.length} Active Charts
+                </Badge>
               </div>
+              {selectedPairs.length === 0 ? (
+                <Card className="bg-muted/30 border-dashed">
+                  <CardContent className="py-12 text-center">
+                    <TrendingUp className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">No Pairs Selected</h3>
+                    <p className="text-muted-foreground">Select trading pairs from the Pairs tab to view their charts</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {selectedPairs.map((pair) => {
+                    const mockData = {
+                      'EUR/USD': { price: 1.0850, change: 0.0025, changePercent: 0.23 },
+                      'GBP/USD': { price: 1.2650, change: -0.0015, changePercent: -0.12 },
+                      'USD/JPY': { price: 149.50, change: 0.75, changePercent: 0.50 },
+                      'AUD/USD': { price: 0.6550, change: -0.0030, changePercent: -0.46 },
+                      'USD/CAD': { price: 1.3425, change: 0.0018, changePercent: 0.13 },
+                      'NZD/USD': { price: 0.6125, change: -0.0012, changePercent: -0.20 },
+                      'USD/CHF': { price: 0.8745, change: 0.0008, changePercent: 0.09 },
+                      'EUR/GBP': { price: 0.8580, change: 0.0035, changePercent: 0.41 },
+                      'EUR/JPY': { price: 162.25, change: 1.25, changePercent: 0.78 },
+                      'GBP/JPY': { price: 189.15, change: -0.85, changePercent: -0.45 },
+                      'AUD/JPY': { price: 97.95, change: 0.45, changePercent: 0.46 },
+                      'XAU/USD': { price: 2045.50, change: 12.30, changePercent: 0.60 }
+                    };
+                    const data = mockData[pair as keyof typeof mockData] || { price: 1.0000, change: 0, changePercent: 0 };
+                    
+                    return (
+                      <PriceChart
+                        key={pair}
+                        pair={pair}
+                        currentPrice={data.price}
+                        change={data.change}
+                        changePercent={data.changePercent}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </TabsContent>
 
@@ -470,6 +487,11 @@ const Index = () => {
       <NotificationCenter 
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}
+      />
+      
+      <SettingsPanel 
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
       />
     </div>
   );

@@ -46,9 +46,14 @@ export const PairSelector = ({ selectedPairs, onPairToggle }: PairSelectorProps)
   return (
     <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="flex items-center font-display">
-          <TrendingUp className="h-5 w-5 mr-2 text-primary" />
-          Trading Pairs
+        <CardTitle className="flex items-center justify-between font-display">
+          <div className="flex items-center">
+            <TrendingUp className="h-5 w-5 mr-2 text-primary" />
+            Trading Pairs
+          </div>
+          <Badge variant="outline" className="bg-primary/10 text-primary">
+            {selectedPairs.length} Selected
+          </Badge>
         </CardTitle>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -65,14 +70,27 @@ export const PairSelector = ({ selectedPairs, onPairToggle }: PairSelectorProps)
           <div
             key={pair.symbol}
             className={`
-              flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all duration-200
+              flex items-center p-3 rounded-lg border cursor-pointer transition-all duration-200
               ${selectedPairs.includes(pair.symbol) 
-                ? 'bg-primary/10 border-primary/30 shadow-sm' 
-                : 'bg-muted/30 border-border hover:bg-muted/50'
+                ? 'bg-primary/15 border-primary/50 shadow-lg shadow-primary/10' 
+                : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-primary/30'
               }
             `}
             onClick={() => onPairToggle(pair.symbol)}
           >
+            <div className="flex items-center mr-3">
+              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                selectedPairs.includes(pair.symbol)
+                  ? 'bg-primary border-primary'
+                  : 'border-muted-foreground hover:border-primary'
+              }`}>
+                {selectedPairs.includes(pair.symbol) && (
+                  <svg className="w-3 h-3 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </div>
+            </div>
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <div>

@@ -30,25 +30,49 @@ const mockNotifications: Notification[] = [
   {
     id: '1',
     type: 'signal',
-    title: 'New Signal: EUR/USD BUY',
-    message: 'High confidence signal generated for EUR/USD with 1:2 R:R',
+    title: 'EUR/USD Signal Activated',
+    message: 'BUY signal triggered at 1.0850 with 85% confidence',
     time: '2 min ago',
     read: false
   },
   {
     id: '2',
     type: 'update',
-    title: 'Signal Update: GBP/USD',
-    message: 'GBP/USD signal reached take profit target',
+    title: 'GBP/USD Trade Success',
+    message: 'Position closed at take profit with +25 pips profit',
     time: '15 min ago',
     read: false
   },
   {
     id: '3',
+    type: 'signal',
+    title: 'USD/JPY Alert',
+    message: 'Strong BUY opportunity detected at 149.50',
+    time: '32 min ago',
+    read: true
+  },
+  {
+    id: '4',
     type: 'alert',
-    title: 'Performance Alert',
-    message: 'Monthly win rate target achieved: 85%',
+    title: 'NY Session Started',
+    message: 'New York trading session active - high volatility expected',
     time: '1 hour ago',
+    read: true
+  },
+  {
+    id: '5',
+    type: 'update',
+    title: 'AUD/USD Trade Loss',
+    message: 'Position closed at stop loss level -15 pips',
+    time: '2 hours ago',
+    read: true
+  },
+  {
+    id: '6',
+    type: 'alert',
+    title: 'Monthly Target Achieved',
+    message: 'Congratulations! Win rate target of 75% reached',
+    time: '3 hours ago',
     read: true
   }
 ];
