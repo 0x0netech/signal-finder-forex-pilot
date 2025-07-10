@@ -10,6 +10,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import PriceChart from '@/components/PriceChart';
 import TradingSignalCard from '@/components/TradingSignalCard';
 import PriceTicker from '@/components/PriceTicker';
+import PairSelector from '@/components/PairSelector';
+import NotificationCenter from '@/components/NotificationCenter';
 import { useToast } from '@/hooks/use-toast';
 
 interface TradingSignal {
@@ -93,6 +95,8 @@ const mockSignals: TradingSignal[] = [
 const Index = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [signals, setSignals] = useState<TradingSignal[]>(mockSignals);
+  const [selectedPairs, setSelectedPairs] = useState<string[]>(['EUR/USD', 'GBP/USD', 'USD/JPY']);
+  const [showNotifications, setShowNotifications] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -117,6 +121,25 @@ const Index = () => {
 
   const handleSignalCopy = (signal: TradingSignal) => {
     // Toast is handled in the component
+  };
+
+  const handlePairToggle = (pair: string) => {
+    setSelectedPairs(prev => 
+      prev.includes(pair) 
+        ? prev.filter(p => p !== pair)
+        : [...prev, pair]
+    );
+  };
+
+  const handleNotificationClick = () => {
+    setShowNotifications(true);
+  };
+
+  const handleSettingsClick = () => {
+    toast({
+      title: "Settings",
+      description: "Settings panel coming soon...",
+    });
   };
 
   return (
@@ -162,10 +185,21 @@ const Index = () => {
                   <Users className="h-4 w-4 mr-2" />
                   1,247 Active
                 </Button>
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hover:bg-muted relative"
+                  onClick={handleNotificationClick}
+                >
                   <Bell className="h-4 w-4" />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full animate-pulse"></div>
                 </Button>
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hover:bg-muted"
+                  onClick={handleSettingsClick}
+                >
                   <Settings className="h-4 w-4" />
                 </Button>
               </div>
@@ -244,8 +278,9 @@ const Index = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="live" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-muted/50 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-4 bg-muted/50 backdrop-blur-sm">
             <TabsTrigger value="live" className="font-medium">Live Signals</TabsTrigger>
+            <TabsTrigger value="pairs" className="font-medium">Trading Pairs</TabsTrigger>
             <TabsTrigger value="charts" className="font-medium">Price Charts</TabsTrigger>
             <TabsTrigger value="analytics" className="font-medium">Performance</TabsTrigger>
           </TabsList>
@@ -302,6 +337,16 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="pairs" className="space-y-6">
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold font-display">Select Trading Pairs</h2>
+              <PairSelector 
+                selectedPairs={selectedPairs}
+                onPairToggle={handlePairToggle}
+              />
+            </div>
           </TabsContent>
 
           <TabsContent value="charts" className="space-y-6">
@@ -421,6 +466,11 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      <NotificationCenter 
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+      />
     </div>
   );
 };

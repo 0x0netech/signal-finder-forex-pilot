@@ -75,7 +75,7 @@ Time: ${signal.time}`;
         hover:shadow-lg hover:shadow-primary/10 hover:border-primary/20
         ${isHovered ? 'transform hover:scale-[1.02]' : ''}
         ${isClicked ? 'transform scale-[0.98]' : ''}
-        ${signal.status === 'ACTIVE' ? 'animate-pulse-glow' : ''}
+        ${signal.status === 'ACTIVE' ? 'ring-1 ring-primary/30' : ''}
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -86,7 +86,7 @@ Time: ${signal.time}`;
           <div className="flex items-center space-x-2">
             <CardTitle className="text-lg font-display">{signal.pair}</CardTitle>
             {signal.status === 'ACTIVE' && (
-              <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-success rounded-full animate-pulse opacity-70"></div>
             )}
           </div>
           <div className="flex items-center space-x-2">
@@ -95,7 +95,7 @@ Time: ${signal.time}`;
               className={`
                 transition-all duration-200 font-mono
                 ${signal.type === 'BUY' ? 'bg-success hover:bg-success/80 text-success-foreground' : 'hover:bg-destructive/80'}
-                ${isHovered ? 'animate-bounce-subtle' : ''}
+                ${isHovered ? 'scale-105' : ''}
               `}
             >
               {signal.type === 'BUY' ? (
